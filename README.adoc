@@ -1,1 +1,14 @@
 = tournament app
+
+== prerequisites
+
+* localstack installed and running
+* `jdk8` or later
+
+== to build and launch the app
+
+[source,bash]
+----
+./gradlew build
+./runApp.sh
+----
