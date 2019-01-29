@@ -17,7 +17,8 @@ internal class RepresentationTest : WithAssertions {
         val uriInfoMock = mock(UriInfo::class.java)
         `when`(uriInfoMock.baseUriBuilder).thenReturn(JerseyUriBuilder())
 
-        val representation = toPlayerRepresentation(Player(PlayerID("playerId"), Nickname("joe"), 75), uriInfoMock)
+        val representation = Player(PlayerID("playerId"), Nickname("joe"), 75)
+                .toPlayerRepresentation(uriInfoMock)
 
         assertThat(representation.id).isEqualTo("playerId")
         assertThat(representation.nickname).isEqualTo("joe")

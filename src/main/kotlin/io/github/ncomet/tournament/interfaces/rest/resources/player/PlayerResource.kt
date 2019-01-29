@@ -5,6 +5,8 @@ import com.fasterxml.jackson.annotation.JsonProperty
 import io.github.ncomet.tournament.domain.player.AllPlayers
 import io.github.ncomet.tournament.domain.player.PlayerID
 import javax.inject.Inject
+import javax.validation.Valid
+import javax.validation.constraints.NotNull
 import javax.ws.rs.*
 import javax.ws.rs.core.Context
 import javax.ws.rs.core.MediaType
@@ -12,14 +14,14 @@ import javax.ws.rs.core.Response
 import javax.ws.rs.core.UriInfo
 
 @Path("/api/players/{id}")
+@Produces(MediaType.APPLICATION_JSON)
 class PlayerResource @Inject constructor(private val allPlayers: AllPlayers) {
 
     @GET
-    @Produces(MediaType.APPLICATION_JSON)
     fun get(@PathParam("id") id: String, @Context uriInfo: UriInfo): Response {
         val player = allPlayers.byId(PlayerID(id))
         return if (player != null) {
-            Response.ok(toPlayerRepresentation(player, uriInfo)).build()
+            Response.ok(player.toPlayerRepresentation(uriInfo)).build()
         } else {
             Response.status(Response.Status.NOT_FOUND).build()
         }
@@ -27,10 +29,10 @@ class PlayerResource @Inject constructor(private val allPlayers: AllPlayers) {
 
     @PUT
     @Consumes(MediaType.APPLICATION_JSON)
-    fun put(@PathParam("id") id: String, body: PlayerBody): Response {
+    fun put(@PathParam("id") id: String, @NotNull @Valid body: PlayerBody): Response {
         val player = allPlayers.byId(PlayerID(id))
         return if (player != null) {
-            val updatedPlayer = player.copy(score = body.score)
+            val updatedPlayer = player.copy(score = body.score!!)
             allPlayers.add(updatedPlayer)
             Response.ok().build()
         } else {
@@ -40,4 +42,4 @@ class PlayerResource @Inject constructor(private val allPlayers: AllPlayers) {
 
 }
 
-data class PlayerBody @JsonCreator constructor(@JsonProperty("score") val score: Int)
+data class PlayerBody @JsonCreator constructor(@field:NotNull @JsonProperty("score") val score: Int?)

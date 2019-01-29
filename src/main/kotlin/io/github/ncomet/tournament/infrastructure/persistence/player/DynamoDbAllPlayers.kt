@@ -5,7 +5,10 @@ import com.amazonaws.services.dynamodbv2.document.Item
 import com.amazonaws.services.dynamodbv2.document.Table
 import dagger.Module
 import dagger.Provides
-import io.github.ncomet.tournament.domain.player.*
+import io.github.ncomet.tournament.domain.player.AllPlayers
+import io.github.ncomet.tournament.domain.player.Nickname
+import io.github.ncomet.tournament.domain.player.Player
+import io.github.ncomet.tournament.domain.player.PlayerID
 import java.util.*
 import javax.inject.Named
 import javax.inject.Singleton
@@ -16,6 +19,8 @@ class DynamoDbAllPlayersModule {
     @Provides
     fun allPlayers(@Named("players") playersTable: Table): AllPlayers = DynamoDbAllPlayers(playersTable)
 }
+
+val PLAYERID_CREATION = PlayerID("FOR_CREATION")
 
 class DynamoDbAllPlayers(private val playersTable: Table) : AllPlayers {
     override fun add(player: Player): Player {
@@ -30,11 +35,11 @@ class DynamoDbAllPlayers(private val playersTable: Table) : AllPlayers {
     }
 
     override fun all(): List<Player> {
-        return playersTable.scan().map(::toPlayer)
+        return playersTable.scan().map { it.toPlayer() }
     }
 
     override fun byId(playerID: PlayerID): Player? {
-        return playersTable.getItem("id", playerID.value)?.let(::toPlayer)
+        return playersTable.getItem("id", playerID.value)?.toPlayer()
     }
 
     override fun removeAll() {
@@ -44,9 +49,5 @@ class DynamoDbAllPlayers(private val playersTable: Table) : AllPlayers {
     }
 }
 
-fun toPlayer(item: Item): Player =
-        Player(
-                PlayerID(item.getString("id")),
-                Nickname(item.getString("nickname")),
-                item.getInt("score")
-        )
+fun Item.toPlayer(): Player =
+        Player(PlayerID(getString("id")), Nickname(getString("nickname")), getInt("score"))

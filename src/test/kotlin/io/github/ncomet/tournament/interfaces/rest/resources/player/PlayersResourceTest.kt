@@ -64,6 +64,36 @@ internal class PlayersResourceTest : WithAssertions {
     }
 
     @Test
+    fun `POST with null body should return 422`() {
+        val response = resources
+                .target("/api/players")
+                .request()
+                .post(Entity.entity(null, MediaType.APPLICATION_JSON_TYPE))
+
+        assertThat(response.status).isEqualTo(422)
+    }
+
+    @Test
+    fun `POST with null nickname should return 422`() {
+        val response = resources
+                .target("/api/players")
+                .request()
+                .post(Entity.entity(PlayerCreateBody(null), MediaType.APPLICATION_JSON_TYPE))
+
+        assertThat(response.status).isEqualTo(422)
+    }
+
+    @Test
+    fun `POST with empty nickname should return 422`() {
+        val response = resources
+                .target("/api/players")
+                .request()
+                .post(Entity.entity(PlayerCreateBody(""), MediaType.APPLICATION_JSON_TYPE))
+
+        assertThat(response.status).isEqualTo(422)
+    }
+
+    @Test
     fun `DELETE should remove all players`() {
         val response = resources
                 .target("/api/players")

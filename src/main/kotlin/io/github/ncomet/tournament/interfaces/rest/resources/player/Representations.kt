@@ -7,7 +7,7 @@ data class AllPlayersRepresentation(val players: List<PlayerRepresentation>)
 data class PlayerRepresentation(val id: String, val nickname: String, val score: Int, val _links: List<LinkRepresentation>)
 data class LinkRepresentation(val rel: String, val href: String)
 
-fun toPlayerRepresentation(player: Player, uriInfo: UriInfo): PlayerRepresentation {
-    val uri = uriInfo.baseUriBuilder.path(PlayerResource::class.java).resolveTemplate("id", player.id.value).build()
-    return PlayerRepresentation(player.id.value, player.nickname.value, player.score, listOf(LinkRepresentation("self", uri.toString())))
+fun Player.toPlayerRepresentation(uriInfo: UriInfo): PlayerRepresentation {
+    val uri = uriInfo.baseUriBuilder.path(PlayerResource::class.java).resolveTemplate("id", id.value).build()
+    return PlayerRepresentation(id.value, nickname.value, score, listOf(LinkRepresentation("self", uri.toString())))
 }

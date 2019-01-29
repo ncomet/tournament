@@ -5,9 +5,12 @@ import com.fasterxml.jackson.annotation.JsonProperty
 import io.github.ncomet.tournament.application.player.PlayersService
 import io.github.ncomet.tournament.domain.player.AllPlayers
 import io.github.ncomet.tournament.domain.player.Nickname
-import io.github.ncomet.tournament.domain.player.PLAYERID_CREATION
 import io.github.ncomet.tournament.domain.player.Player
+import io.github.ncomet.tournament.infrastructure.persistence.player.PLAYERID_CREATION
+import org.hibernate.validator.constraints.NotEmpty
 import javax.inject.Inject
+import javax.validation.Valid
+import javax.validation.constraints.NotNull
 import javax.ws.rs.*
 import javax.ws.rs.core.Context
 import javax.ws.rs.core.MediaType
@@ -15,18 +18,18 @@ import javax.ws.rs.core.Response
 import javax.ws.rs.core.UriInfo
 
 @Path("/api/players")
+@Produces(MediaType.APPLICATION_JSON)
 class PlayersResource @Inject constructor(private val playersService: PlayersService, private val allPlayers: AllPlayers) {
 
     @GET
-    @Produces(MediaType.APPLICATION_JSON)
     fun get(@Context uriInfo: UriInfo): Response {
-        return Response.ok(AllPlayersRepresentation(playersService.sortedByScoreDesc().map { toPlayerRepresentation(it, uriInfo) })).build()
+        return Response.ok(AllPlayersRepresentation(playersService.sortedByScoreDesc().map { it.toPlayerRepresentation(uriInfo) })).build()
     }
 
     @POST
     @Consumes(MediaType.APPLICATION_JSON)
-    fun post(@Context uriInfo: UriInfo, body: PlayerCreateBody): Response {
-        val player = allPlayers.add(Player(PLAYERID_CREATION, Nickname(body.nickname)))
+    fun post(@Context uriInfo: UriInfo, @NotNull @Valid body: PlayerCreateBody): Response {
+        val player = allPlayers.add(Player(PLAYERID_CREATION, Nickname(body.nickname!!)))
         val location = uriInfo.absolutePathBuilder.path(player.id.value).build()
         return Response.created(location).build()
     }
@@ -38,4 +41,4 @@ class PlayersResource @Inject constructor(private val playersService: PlayersSer
     }
 }
 
-data class PlayerCreateBody @JsonCreator constructor(@JsonProperty("nickname") val nickname: String)
+data class PlayerCreateBody @JsonCreator constructor(@field:NotEmpty @JsonProperty("nickname") val nickname: String?)

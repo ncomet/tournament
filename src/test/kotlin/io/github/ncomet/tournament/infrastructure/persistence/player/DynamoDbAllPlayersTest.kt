@@ -21,6 +21,19 @@ internal class DynamoDbAllPlayersTest : WithAssertions {
     @BeforeEach
     internal fun setUp() = initMocks(this)
 
+    @Test
+    fun `should map Item to Player`() {
+        val player = Item()
+                .withString("id", "playerId")
+                .withString("nickname", "rob")
+                .withInt("score", 19)
+                .toPlayer()
+
+        assertThat(player.id).isEqualTo(PlayerID("playerId"))
+        assertThat(player.nickname).isEqualTo(Nickname("rob"))
+        assertThat(player.score).isEqualTo(19)
+    }
+
     @Nested
     inner class ById {
 

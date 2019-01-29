@@ -6,8 +6,6 @@ data class PlayerID(val value: String) {
     }
 }
 
-val PLAYERID_CREATION = PlayerID("FOR_CREATION")
-
 data class Nickname(val value: String) {
     init {
         require(value.isNotBlank()) { "Nickname.value should not be empty" }

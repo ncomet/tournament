@@ -81,4 +81,13 @@ internal class PlayerResourceTest : WithAssertions {
         assertThat(response.status).isEqualTo(404)
     }
 
+    @Test
+    fun `PUT with null score should return 422`() {
+        val response = resources
+                .target("/api/players/0")
+                .request()
+                .put(Entity.entity(PlayerBody(null), MediaType.APPLICATION_JSON_TYPE))
+
+        assertThat(response.status).isEqualTo(422)
+    }
 }
