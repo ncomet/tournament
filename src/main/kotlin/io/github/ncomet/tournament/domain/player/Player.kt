@@ -1,13 +1,20 @@
 package io.github.ncomet.tournament.domain.player
 
-data class PlayerID(val nickname: String) {
+data class PlayerID(val value: String) {
     init {
-        require(nickname.isNotBlank()) { "PlayerID.nickname should not be empty" }
+        require(value.isNotBlank()) { "PlayerID.value should not be empty" }
     }
 }
 
-class Player(val id: PlayerID, val score: Int = 0) {
+val PLAYERID_CREATION = PlayerID("FOR_CREATION")
 
+data class Nickname(val value: String) {
+    init {
+        require(value.isNotBlank()) { "Nickname.value should not be empty" }
+    }
+}
+
+data class Player(val id: PlayerID, val nickname: Nickname, val score: Int = 0) {
     override fun equals(other: Any?): Boolean {
         if (this === other) return true
         if (javaClass != other?.javaClass) return false
@@ -22,7 +29,7 @@ class Player(val id: PlayerID, val score: Int = 0) {
 }
 
 interface AllPlayers {
-    fun add(player: Player)
+    fun add(player: Player): Player
     fun all(): List<Player>
     fun byId(playerID: PlayerID): Player?
     fun removeAll()

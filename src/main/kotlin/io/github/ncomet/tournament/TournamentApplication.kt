@@ -12,6 +12,7 @@ class TournamentApplication(): Application<TournamentConfig>() {
         println("Running Tournament")
         val component = DaggerTournamentComponent.builder().build()
         environment.jersey().register(component.playersResource())
+        environment.jersey().register(component.playerResource())
         environment.healthChecks().register("DynamoDbHealthCheck", component.dynamoDbHealthCheck())
     }
 }

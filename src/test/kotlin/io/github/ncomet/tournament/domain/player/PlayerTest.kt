@@ -1,41 +1,48 @@
 package io.github.ncomet.tournament.domain.player
 
-import org.assertj.core.api.Assertions.*
-import org.junit.jupiter.api.Assertions.*
+import org.assertj.core.api.WithAssertions
+import org.junit.jupiter.api.Assertions.assertThrows
 import org.junit.jupiter.api.Test
-import java.lang.IllegalArgumentException
 
-internal class PlayerTest {
+internal class PlayerTest : WithAssertions {
 
     @Test
-    internal fun `PlayerID should throw IAE when nickname is empty`() {
+    fun `PlayerID should throw IAE when nickname is empty`() {
         val exception = assertThrows(IllegalArgumentException::class.java) { PlayerID(" ") }
-        assertThat(exception.message).isEqualTo("PlayerID.nickname should not be empty")
+        assertThat(exception.message).isEqualTo("PlayerID.value should not be empty")
     }
 
     @Test
-    internal fun `should properly instanciate`() {
-        val player = Player(PlayerID("myNickname"))
+    fun `Nickname should throw IAE when nickname is empty`() {
+        val exception = assertThrows(IllegalArgumentException::class.java) { Nickname(" ") }
+        assertThat(exception.message).isEqualTo("Nickname.value should not be empty")
+    }
 
-        assertThat(player.id.nickname).isEqualTo("myNickname")
+    @Test
+    fun `should properly instanciate`() {
+        val player = Player(PlayerID("myId"), Nickname("john"))
+
+        assertThat(player.id.value).isEqualTo("myId")
+        assertThat(player.nickname.value).isEqualTo("john")
         assertThat(player.score).isEqualTo(0)
     }
 
     @Test
-    internal fun `should properly instanciate with a score`() {
-        val player = Player(PlayerID("myNickname"), 42)
+    fun `should properly instanciate with a score`() {
+        val player = Player(PlayerID("uuid"), Nickname("robert"), 42)
 
-        assertThat(player.id.nickname).isEqualTo("myNickname")
+        assertThat(player.id.value).isEqualTo("uuid")
+        assertThat(player.nickname.value).isEqualTo("robert")
         assertThat(player.score).isEqualTo(42)
     }
 
     @Test
-    internal fun `equals is based on PlayerID`() {
-        assertThat(Player(PlayerID("peter"), 33)).isEqualTo(Player(PlayerID("peter"), 78))
+    fun `equals is based on PlayerID`() {
+        assertThat(Player(PlayerID("id"), Nickname("georges"), 33)).isEqualTo(Player(PlayerID("id"), Nickname("denis"), 78))
     }
 
     @Test
-    internal fun `hashcode is based on PlayerID`() {
-        assertThat(Player(PlayerID("peter"), 33)).hasSameHashCodeAs(Player(PlayerID("peter"), 78))
+    fun `hashcode is based on PlayerID`() {
+        assertThat(Player(PlayerID("id"), Nickname("georges"), 33)).hasSameHashCodeAs(Player(PlayerID("id"), Nickname("denis"), 78))
     }
 }

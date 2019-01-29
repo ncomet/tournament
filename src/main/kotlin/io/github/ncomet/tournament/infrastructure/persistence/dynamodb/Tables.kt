@@ -5,7 +5,6 @@ import com.amazonaws.services.dynamodbv2.document.Table
 import com.amazonaws.services.dynamodbv2.model.*
 import dagger.Module
 import dagger.Provides
-import javax.inject.Inject
 import javax.inject.Named
 import javax.inject.Singleton
 
@@ -29,12 +28,12 @@ class Tables(private val dynamoDB: DynamoDB) {
         val createTableRequest = CreateTableRequest().apply {
             setAttributeDefinitions(
                     listOf(
-                            AttributeDefinition("nickname", ScalarAttributeType.S)
+                            AttributeDefinition("id", ScalarAttributeType.S)
                     )
             )
             setKeySchema(
                     listOf(
-                            KeySchemaElement("nickname", KeyType.HASH)
+                            KeySchemaElement("id", KeyType.HASH)
                     )
             )
             provisionedThroughput = ProvisionedThroughput(5L, 6L)
