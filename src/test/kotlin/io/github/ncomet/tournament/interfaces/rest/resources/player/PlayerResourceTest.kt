@@ -18,9 +18,9 @@ import javax.ws.rs.core.MediaType
 @ExtendWith(DropwizardExtensionsSupport::class)
 internal class PlayerResourceTest : WithAssertions {
 
-    val allPlayers: AllPlayers = InMemoryAllPlayers()
+    private val allPlayers: AllPlayers = InMemoryAllPlayers()
 
-    val resources: ResourceExtension = ResourceExtension.builder()
+    private val resources: ResourceExtension = ResourceExtension.builder()
             .addResource(PlayerResource(allPlayers))
             .build()
 

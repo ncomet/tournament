@@ -9,6 +9,7 @@ import io.github.ncomet.tournament.domain.player.AllPlayers
 import io.github.ncomet.tournament.domain.player.Nickname
 import io.github.ncomet.tournament.domain.player.Player
 import io.github.ncomet.tournament.domain.player.PlayerID
+import io.github.ncomet.tournament.infrastructure.persistence.dynamodb.PLAYERS_TABLE_NAME
 import java.util.*
 import javax.inject.Named
 import javax.inject.Singleton
@@ -17,7 +18,7 @@ import javax.inject.Singleton
 class DynamoDbAllPlayersModule {
     @Singleton
     @Provides
-    fun allPlayers(@Named("players") playersTable: Table): AllPlayers = DynamoDbAllPlayers(playersTable)
+    fun allPlayers(@Named(PLAYERS_TABLE_NAME) playersTable: Table): AllPlayers = DynamoDbAllPlayers(playersTable)
 }
 
 val PLAYERID_CREATION = PlayerID("FOR_CREATION")

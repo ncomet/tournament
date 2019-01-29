@@ -14,7 +14,7 @@ const val PLAYERS_TABLE_NAME = "players"
 class TablesModule {
     @Provides
     @Singleton
-    @Named("players")
+    @Named(PLAYERS_TABLE_NAME)
     fun tables(dynamoDB: DynamoDB): Table = Tables(dynamoDB).playersTable()
 }
 

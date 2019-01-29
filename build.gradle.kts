@@ -33,6 +33,9 @@ dependencies {
     compile("com.google.dagger:dagger:2.21")
     compile("io.dropwizard:dropwizard-core:1.3.8")
     compile("com.amazonaws:aws-java-sdk-dynamodb:1.11.490")
+    compile("com.smoketurner:dropwizard-swagger:1.3.8-1")
+    //fix classpath problem with dropwizard-swagger
+    runtimeOnly("org.reflections:reflections:0.9.10")
 
     testImplementation("org.junit.jupiter:junit-jupiter-api:5.1.1")
     testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine:5.1.1")

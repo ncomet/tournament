@@ -7,6 +7,7 @@ import io.github.ncomet.tournament.domain.player.AllPlayers
 import io.github.ncomet.tournament.domain.player.Nickname
 import io.github.ncomet.tournament.domain.player.Player
 import io.github.ncomet.tournament.infrastructure.persistence.player.PLAYERID_CREATION
+import io.swagger.annotations.Api
 import org.hibernate.validator.constraints.NotEmpty
 import javax.inject.Inject
 import javax.validation.Valid
@@ -18,6 +19,7 @@ import javax.ws.rs.core.Response
 import javax.ws.rs.core.UriInfo
 
 @Path("/api/players")
+@Api(tags = ["/api/players"], description = "Resource for managing Players")
 @Produces(MediaType.APPLICATION_JSON)
 class PlayersResource @Inject constructor(private val playersService: PlayersService, private val allPlayers: AllPlayers) {
 

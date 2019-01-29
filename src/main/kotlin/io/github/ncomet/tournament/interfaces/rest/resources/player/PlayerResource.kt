@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonCreator
 import com.fasterxml.jackson.annotation.JsonProperty
 import io.github.ncomet.tournament.domain.player.AllPlayers
 import io.github.ncomet.tournament.domain.player.PlayerID
+import io.swagger.annotations.Api
 import javax.inject.Inject
 import javax.validation.Valid
 import javax.validation.constraints.NotNull
@@ -14,6 +15,7 @@ import javax.ws.rs.core.Response
 import javax.ws.rs.core.UriInfo
 
 @Path("/api/players/{id}")
+@Api(tags = ["/api/players/{id}"], description = "Resource for managing a single Player")
 @Produces(MediaType.APPLICATION_JSON)
 class PlayerResource @Inject constructor(private val allPlayers: AllPlayers) {
 
