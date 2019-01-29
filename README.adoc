@@ -12,3 +12,7 @@
 ./gradlew build
 ./runApp.sh
 ----
+
+== to access swagger API doc
+
+http://localhost:8080/swagger
