@@ -16,3 +16,11 @@
 == to access swagger API doc
 
 http://localhost:8080/swagger
+
+== to run Karate integration tests while app is running
+
+[source,bash]
+----
+cd it
+./gradlew test
+----
