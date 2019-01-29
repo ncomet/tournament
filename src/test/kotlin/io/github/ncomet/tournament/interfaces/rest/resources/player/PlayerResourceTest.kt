@@ -46,6 +46,17 @@ internal class PlayerResourceTest : WithAssertions {
         assertThat(playerRepresentation._links).hasSize(1)
     }
 
+
+    @Test
+    fun `GET should return 404 if player not found`() {
+        val response = resources
+                .target("/api/players/123")
+                .request()
+                .get()
+
+        assertThat(response.status).isEqualTo(404)
+    }
+
     @Test
     fun `PUT should replace player score`() {
         val response = resources
@@ -59,4 +70,15 @@ internal class PlayerResourceTest : WithAssertions {
         assertThat(player.id).isEqualTo(PlayerID("0"))
         assertThat(player.nickname).isEqualTo(Nickname("piotr"))
     }
+
+    @Test
+    fun `PUT should return 404 if player not found`() {
+        val response = resources
+                .target("/api/players/123")
+                .request()
+                .put(Entity.entity(PlayerBody(70), MediaType.APPLICATION_JSON_TYPE))
+
+        assertThat(response.status).isEqualTo(404)
+    }
+
 }
