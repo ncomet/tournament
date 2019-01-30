@@ -1,11 +1,13 @@
 = tournament app
 
-== prerequisites
+== Prerequisites
 
 * localstack installed and running
 * `jdk8` or later
 
-== to build and launch the app
+== Build & Start
+
+to build and launch the app (dev mode)
 
 [source,bash]
 ----
@@ -13,14 +15,35 @@
 ./runApp.sh
 ----
 
-== to access swagger API doc
+== REST API doc
+
+to access swagger API doc
 
 http://localhost:8080/swagger
 
-== to run Karate integration tests while app is running
+== Integration Tests
+
+To run Karate integration tests while app is running
 
 [source,bash]
 ----
 cd it
 ./gradlew test
 ----
+
+== Production
+
+For production, the following environment variables need to be defined :
+
+* AWS_ACCESS_KEY_ID
+* AWS_SECRET_ACCESS_KEY
+* DYNAMODB_URI
+* DYNAMODB_REGION
+
+[source,bash]
+----
+./gradlew assemble
+java -jar build/libs/tournament.jar server
+----
+
+
