@@ -7,11 +7,17 @@
 
 == Build & Start
 
-to build and launch the app (dev mode)
+to build and run all tests
 
 [source,bash]
 ----
 ./gradlew build
+----
+
+to launch the app (dev mode)
+
+[source,bash]
+----
 ./runApp.sh
 ----
 
