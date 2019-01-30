@@ -3,6 +3,7 @@ package io.github.ncomet.tournament.interfaces.rest.resources.player
 import com.beust.klaxon.Klaxon
 import io.dropwizard.testing.junit5.DropwizardExtensionsSupport
 import io.dropwizard.testing.junit5.ResourceExtension
+import io.github.ncomet.tournament.application.player.PlayersService
 import io.github.ncomet.tournament.domain.player.AllPlayers
 import io.github.ncomet.tournament.domain.player.Nickname
 import io.github.ncomet.tournament.domain.player.Player
@@ -21,13 +22,14 @@ internal class PlayerResourceTest : WithAssertions {
     private val allPlayers: AllPlayers = InMemoryAllPlayers()
 
     private val resources: ResourceExtension = ResourceExtension.builder()
-            .addResource(PlayerResource(allPlayers))
+            .addResource(PlayerResource(PlayersService(allPlayers), allPlayers))
             .build()
 
     @BeforeEach
     fun setUp() {
         allPlayers.removeAll()
-        allPlayers.add(Player(PlayerID("0"), Nickname("piotr"), 32))
+        allPlayers.add(Player(PlayerID("0"), Nickname("piotr"), 10))
+        allPlayers.add(Player(PlayerID("1"), Nickname("quentin"), 10))
     }
 
     @Test
@@ -39,10 +41,12 @@ internal class PlayerResourceTest : WithAssertions {
 
         assertThat(response.status).isEqualTo(200)
         val entity = response.readEntity(String::class.java)
-        val playerRepresentation = Klaxon().parse<PlayerRepresentation>(entity)!!
+        val playerRepresentation = Klaxon().parse<RankedPlayerRepresentation>(entity)!!
         assertThat(playerRepresentation.id).isEqualTo("0")
         assertThat(playerRepresentation.nickname).isEqualTo("piotr")
-        assertThat(playerRepresentation.score).isEqualTo(32)
+        assertThat(playerRepresentation.score).isEqualTo(10)
+        assertThat(playerRepresentation.ranking.rank).isEqualTo(1)
+        assertThat(playerRepresentation.ranking.tie).isEqualTo(true)
         assertThat(playerRepresentation._links).hasSize(1)
     }
 

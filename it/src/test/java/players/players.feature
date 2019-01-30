@@ -13,7 +13,8 @@ Feature: IT Players API
     Given path 'api', 'players'
     When method get
     Then status 200
-    And match response.players[0] contains { 'nickname': 'nicolas', score: 0 }
+    And match response.players[0] contains { nickname: 'nicolas', score: 0 }
+    And assert response.players[0]._links.length == 1
 
     * def playerId = response.players[0].id
 
@@ -25,7 +26,8 @@ Feature: IT Players API
     Given path 'api', 'players', playerId
     When method get
     Then status 200
-    And assert response.score == 77
+    And match response contains { nickname: 'nicolas', score: 77, ranking: { rank: 1, tie: false } }
+    And assert response._links.length == 1
 
     Given path 'api', 'players'
     When method delete

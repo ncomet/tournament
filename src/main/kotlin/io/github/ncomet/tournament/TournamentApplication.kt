@@ -16,7 +16,7 @@ object swaggerBundle : SwaggerBundle<TournamentConfig>() {
     }
 }
 
-class TournamentConfig(val name: String = "undefined"): Configuration()
+class TournamentConfig : Configuration()
 
 class TournamentApplication(): Application<TournamentConfig>() {
     override fun run(configuration: TournamentConfig, environment: Environment) {

@@ -1,5 +1,7 @@
 package io.github.ncomet.tournament.domain.player
 
+import io.github.ncomet.tournament.domain.rank.Rank
+
 data class PlayerID(val value: String) {
     init {
         require(value.isNotBlank()) { "PlayerID.value should not be empty" }
@@ -32,3 +34,5 @@ interface AllPlayers {
     fun byId(playerID: PlayerID): Player?
     fun removeAll()
 }
+
+typealias RankedPlayer = Pair<Player, Rank>
