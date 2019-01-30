@@ -1,4 +1,6 @@
-= tournament app
+= Tournament app
+
+Travis CI : image:https://travis-ci.com/ncomet/tournament.svg?token=zjERHfQ93xyr8dzuPZod&branch=master["Build Status", link="https://travis-ci.com/ncomet/tournament"]
 
 == Prerequisites
 
