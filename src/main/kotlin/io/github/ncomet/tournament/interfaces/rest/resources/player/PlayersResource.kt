@@ -6,9 +6,10 @@ import io.github.ncomet.tournament.application.player.PlayersService
 import io.github.ncomet.tournament.domain.player.AllPlayers
 import io.github.ncomet.tournament.domain.player.Nickname
 import io.github.ncomet.tournament.domain.player.Player
-import io.github.ncomet.tournament.infrastructure.persistence.player.PLAYERID_CREATION
+import io.github.ncomet.tournament.domain.player.PlayerID
 import io.swagger.annotations.Api
 import org.hibernate.validator.constraints.NotEmpty
+import java.util.*
 import javax.inject.Inject
 import javax.validation.Valid
 import javax.validation.constraints.NotNull
@@ -31,7 +32,7 @@ class PlayersResource @Inject constructor(private val playersService: PlayersSer
     @POST
     @Consumes(MediaType.APPLICATION_JSON)
     fun post(@Context uriInfo: UriInfo, @NotNull @Valid body: PlayerCreateBody): Response {
-        val player = allPlayers.add(Player(PLAYERID_CREATION, Nickname(body.nickname!!)))
+        val player = allPlayers.add(Player(PlayerID(UUID.randomUUID().toString()), Nickname(body.nickname!!)))
         val location = uriInfo.absolutePathBuilder.path(player.id.value).build()
         return Response.created(location).build()
     }
