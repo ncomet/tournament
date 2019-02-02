@@ -2,6 +2,9 @@
 
 Travis CI : image:https://travis-ci.com/ncomet/tournament.svg?token=zjERHfQ93xyr8dzuPZod&branch=master["Build Status", link="https://travis-ci.com/ncomet/tournament"]
 
+* Domain Driven Design (DDD) implementation
+* TDD implementation
+
 == Note on branches
 
 === branch `master`
@@ -55,6 +58,10 @@ To run Karate integration tests while app is running
 cd it
 ./gradlew test
 ----
+
+== HealthCheck
+
+HealthCheck for DynamoDB availability : http://localhost:8080/health
 
 == REST API doc
 
