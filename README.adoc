@@ -49,9 +49,9 @@ to launch the app (dev mode)
 ./runApp.sh
 ----
 
-== Integration Tests
+== Karate end to end tests
 
-To run Karate integration tests while app is running
+To run https://github.com/intuit/karate[Karate] integration tests while app is running
 
 [source,bash]
 ----
