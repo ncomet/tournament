@@ -1,6 +1,29 @@
 = Tournament app
 
-Travis CI : image:https://travis-ci.com/ncomet/tournament.svg?token=zjERHfQ93xyr8dzuPZod&branch=master["Build Status", link="https://travis-ci.com/ncomet/tournament"]
+Travis CI : image:https://www.travis-ci.com/ncomet/tournament.svg?token=zjERHfQ93xyr8dzuPZod&branch=one-table-inmemory-scoring["Build Status", link="https://www.travis-ci.com/ncomet/tournament"]
+
+== Note on branches
+
+=== branch `master`
+
+NOTE: Implementation that is made to scale up with increasing number of players
+
+2 DynamoDB tables :
+
+* `scores` (used for sorting & ranking players)
+** Primary (HASH `entry` string, RANGE `score` number), `entry` will never change and value will always be "entry", `score` is used to store the score, and will always be sorted.
+** One attribute `playerIds` : `Set<String>` the playersIds which have score `score`
+
+* `players` (used for players info)
+** Primary (HASH `id` string) `id` being the playerId that will be looked up after browsing `scores` table
+** Attributes `nickname` string & `score` number (we replicate the score here for allPlayers view)
+
+=== branch `one-table-inmemory-scoring`
+
+NOTE: Simpler implementation, but can only handle a small number of players due to how DynamoDB hashes the keys
+
+It only uses `players` table as described above in `master` branch.
+Sorting is done in memory on scores after a full `scan()` of players table, which is inefficient if there is a large number of players, but easier since there is no synchronization to maintain between two tables.
 
 == Prerequisites
 
@@ -23,12 +46,6 @@ to launch the app (dev mode)
 ./runApp.sh
 ----
 
-== REST API doc
-
-to access swagger API doc
-
-http://localhost:8080/swagger
-
 == Integration Tests
 
 To run Karate integration tests while app is running
@@ -38,6 +55,12 @@ To run Karate integration tests while app is running
 cd it
 ./gradlew test
 ----
+
+== REST API doc
+
+to access swagger API doc
+
+http://localhost:8080/swagger
 
 == Production
 
