@@ -10,7 +10,6 @@ import io.github.ncomet.tournament.domain.player.Nickname
 import io.github.ncomet.tournament.domain.player.Player
 import io.github.ncomet.tournament.domain.player.PlayerID
 import io.github.ncomet.tournament.infrastructure.persistence.dynamodb.PLAYERS_TABLE_NAME
-import java.util.*
 import javax.inject.Named
 import javax.inject.Singleton
 
@@ -21,29 +20,22 @@ class DynamoDbAllPlayersModule {
     fun allPlayers(@Named(PLAYERS_TABLE_NAME) playersTable: Table): AllPlayers = DynamoDbAllPlayers(playersTable)
 }
 
-val PLAYERID_CREATION = PlayerID("FOR_CREATION")
-
 class DynamoDbAllPlayers(private val playersTable: Table) : AllPlayers {
     override fun add(player: Player): Player {
-        val newPlayer = player.copy(id = if (PLAYERID_CREATION == player.id) PlayerID(UUID.randomUUID().toString()) else player.id)
         playersTable.updateItem(
                 "id",
-                newPlayer.id.value,
-                AttributeUpdate("nickname").put(newPlayer.nickname.value),
-                AttributeUpdate("score").put(newPlayer.score)
+                player.id.value,
+                AttributeUpdate("nickname").put(player.nickname.value),
+                AttributeUpdate("score").put(player.score)
         )
-        return newPlayer
-    }
-
-    override fun all(): List<Player> {
-        return playersTable.scan().map { it.toPlayer() }
+        return player
     }
 
     override fun byId(playerID: PlayerID): Player? {
         return playersTable.getItem("id", playerID.value)?.toPlayer()
     }
 
-    override fun removeAll() {
+    override fun remove() {
         playersTable.scan().forEach {
             playersTable.deleteItem("id", it.getString("id"))
         }

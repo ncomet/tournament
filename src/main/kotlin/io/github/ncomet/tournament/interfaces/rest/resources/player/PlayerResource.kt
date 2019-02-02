@@ -38,7 +38,7 @@ class PlayerResource @Inject constructor(private val playersService: PlayersServ
         val player = allPlayers.byId(PlayerID(id))
         return if (player != null) {
             val updatedPlayer = player.copy(score = body.score!!)
-            allPlayers.add(updatedPlayer)
+            playersService.addPlayer(updatedPlayer)
             Response.ok().build()
         } else {
             Response.status(Response.Status.NOT_FOUND).build()

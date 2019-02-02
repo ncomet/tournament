@@ -8,7 +8,10 @@ import io.github.ncomet.tournament.domain.player.AllPlayers
 import io.github.ncomet.tournament.domain.player.Nickname
 import io.github.ncomet.tournament.domain.player.Player
 import io.github.ncomet.tournament.domain.player.PlayerID
+import io.github.ncomet.tournament.domain.score.AllScores
+import io.github.ncomet.tournament.domain.score.PlayerScore
 import io.github.ncomet.tournament.infrastructure.persistence.player.InMemoryAllPlayers
+import io.github.ncomet.tournament.infrastructure.persistence.score.InMemoryAllScores
 import org.assertj.core.api.WithAssertions
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
@@ -20,16 +23,23 @@ import javax.ws.rs.core.MediaType
 internal class PlayerResourceTest : WithAssertions {
 
     private val allPlayers: AllPlayers = InMemoryAllPlayers()
+    private val allScores: AllScores = InMemoryAllScores()
 
     private val resources: ResourceExtension = ResourceExtension.builder()
-            .addResource(PlayerResource(PlayersService(allPlayers), allPlayers))
+            .addResource(PlayerResource(PlayersService(allScores, allPlayers), allPlayers))
             .build()
 
     @BeforeEach
     fun setUp() {
-        allPlayers.removeAll()
-        allPlayers.add(Player(PlayerID("0"), Nickname("piotr"), 10))
-        allPlayers.add(Player(PlayerID("1"), Nickname("quentin"), 10))
+        allScores.remove()
+        allPlayers.remove()
+        listOf(
+                Player(PlayerID("0"), Nickname("piotr"), 10),
+                Player(PlayerID("1"), Nickname("quentin"), 10)
+        ).forEach {
+            allScores.addPlayerScore(PlayerScore(it.score, it.id))
+            allPlayers.add(it)
+        }
     }
 
     @Test

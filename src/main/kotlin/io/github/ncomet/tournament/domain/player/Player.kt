@@ -30,9 +30,8 @@ data class Player(val id: PlayerID, val nickname: Nickname, val score: Int = 0) 
 
 interface AllPlayers {
     fun add(player: Player): Player
-    fun all(): List<Player>
     fun byId(playerID: PlayerID): Player?
-    fun removeAll()
+    fun remove()
 }
 
 typealias RankedPlayer = Pair<Player, Rank>
